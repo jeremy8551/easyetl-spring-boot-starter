@@ -3,8 +3,17 @@ package icu.etl.springboot.stater;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
+import icu.etl.ioc.BeanFactory;
+import icu.etl.ioc.Codepage;
+import icu.etl.ioc.NationalHoliday;
+import icu.etl.script.UniversalScriptEngineFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 
 /**
  * 场景启动器的配置类
@@ -13,12 +22,30 @@ import org.springframework.context.annotation.Configuration;
  * @createtime 2023/10/3
  */
 @Configuration
+@ConditionalOnClass(UniversalScriptEngineFactory.class)
+@EnableConfigurationProperties(EasyETLProperties.class)
 public class EasyETLConfiguration {
 
     @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
     public ScriptEngine getScriptEngine() {
-        ScriptEngineManager manager = new ScriptEngineManager();
-        return manager.getEngineByName("etl");
+        return new ScriptEngineManager().getEngineByName("etl");
+    }
+
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public UniversalScriptEngineFactory getScriptEngineFactory() {
+        return new UniversalScriptEngineFactory();
+    }
+
+    @Bean
+    public NationalHoliday getNationalHoliday() {
+        return BeanFactory.get(NationalHoliday.class);
+    }
+
+    @Bean
+    public Codepage getCodepage() {
+        return BeanFactory.get(Codepage.class);
     }
 
 }
