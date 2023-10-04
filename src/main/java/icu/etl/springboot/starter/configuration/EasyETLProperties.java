@@ -1,4 +1,4 @@
-package icu.etl.springboot.stater;
+package icu.etl.springboot.starter.configuration;
 
 import icu.etl.util.IO;
 import org.springframework.boot.context.properties.ConfigurationProperties;

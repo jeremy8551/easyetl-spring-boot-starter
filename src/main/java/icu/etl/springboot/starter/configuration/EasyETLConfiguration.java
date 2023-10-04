@@ -1,11 +1,9 @@
-package icu.etl.springboot.stater;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
+package icu.etl.springboot.starter.configuration;
 
 import icu.etl.ioc.BeanFactory;
 import icu.etl.ioc.Codepage;
 import icu.etl.ioc.NationalHoliday;
+import icu.etl.script.UniversalScriptEngine;
 import icu.etl.script.UniversalScriptEngineFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -26,10 +24,10 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @EnableConfigurationProperties(EasyETLProperties.class)
 public class EasyETLConfiguration {
 
-    @Bean
+    @Bean(destroyMethod = "destroyMethod")
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public ScriptEngine getScriptEngine() {
-        return new ScriptEngineManager().getEngineByName("etl");
+    public UniversalScriptEngine getScriptEngine() {
+        return this.getScriptEngineFactory().getScriptEngine();
     }
 
     @Bean
