@@ -4,9 +4,10 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import icu.etl.ioc.BeanFactory;
+import icu.etl.ioc.BeanContext;
 import icu.etl.util.ArrayUtils;
 import icu.etl.util.ClassUtils;
+import icu.etl.util.Ensure;
 import icu.etl.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -53,10 +54,19 @@ public class EasyETLStarter {
             }
         }
 
+        StringBuilder buf = new StringBuilder(100);
+        for (String pkg : includes) {
+            buf.append(pkg).append(',');
+        }
+        for (String pkg : excludes) {
+            buf.append('!').append(pkg).append(',');
+        }
+
         ClassLoader classLoader = application.getClassLoader();
         log.info("easyetl scanner classLoader {}", (classLoader == null ? "" : classLoader.getClass().getName()));
         log.info("easyetl includeds package {}", StringUtils.join(includes, ","));
-        log.info("easyetl excludeds package {}", StringUtils.join(includes, ","));
-        BeanFactory.load(classLoader, includes, excludes);
+        log.info("easyetl excludeds package {}", StringUtils.join(excludes, ","));
+        BeanContext context = new BeanContext(classLoader, buf.toString());
+        Ensure.notnull(context);
     }
 }

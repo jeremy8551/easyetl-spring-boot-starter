@@ -1,5 +1,6 @@
 package icu.etl.springboot.starter.configuration;
 
+import icu.etl.ioc.BeanContext;
 import icu.etl.ioc.BeanFactory;
 import icu.etl.ioc.Codepage;
 import icu.etl.ioc.NationalHoliday;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -19,10 +21,16 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * @author jeremy8551@qq.com
  * @createtime 2023/10/3
  */
+@Lazy
 @Configuration
 @ConditionalOnClass(UniversalScriptEngineFactory.class)
 @EnableConfigurationProperties(EasyETLProperties.class)
 public class EasyETLConfiguration {
+
+    @Bean
+    public BeanContext getBeanContext() {
+        return BeanFactory.getContext();
+    }
 
     @Bean(destroyMethod = "destroyMethod")
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)

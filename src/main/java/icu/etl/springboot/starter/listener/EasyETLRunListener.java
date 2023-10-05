@@ -2,7 +2,6 @@ package icu.etl.springboot.starter.listener;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import icu.etl.util.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -72,10 +71,6 @@ public class EasyETLRunListener implements SpringApplicationRunListener {
     public void finished(ConfigurableApplicationContext context, Throwable exception) {
         if (notstart.getAndSet(false)) {
             EasyETLStarter.run(this.application, this.args, log);
-            String[] filepaths = ClassUtils.getJavaClassPath();
-            for (String filepath : filepaths) {
-                System.out.println(filepath);
-            }
         }
     }
 
