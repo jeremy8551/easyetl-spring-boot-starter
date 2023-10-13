@@ -32,7 +32,7 @@ public class EasyETLConfiguration {
         return BeanFactory.getContext();
     }
 
-    @Bean(destroyMethod = "destroyMethod")
+    @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
     public UniversalScriptEngine getScriptEngine() {
         return this.getScriptEngineFactory().getScriptEngine();
