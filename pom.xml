@@ -32,8 +32,8 @@
 
         <dependency>
             <groupId>icu.etl</groupId>
-            <artifactId>easyetl</artifactId>
-            <version>1.1.0</version>
+            <artifactId>easyetl-script</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>

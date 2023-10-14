@@ -49,24 +49,35 @@ public class EasyETLStarter {
                 excludes.addAll(ClassUtils.asNameList(anno.exclude()));
             } else if (obj instanceof ComponentScan) {
                 ComponentScan anno = (ComponentScan) obj;
+                includes.addAll(ArrayUtils.asList(anno.value()));
                 includes.addAll(ArrayUtils.asList(anno.basePackages()));
                 includes.addAll(ClassUtils.asNameList(anno.basePackageClasses()));
             }
         }
 
-        StringBuilder buf = new StringBuilder(100);
-        for (String pkg : includes) {
-            buf.append(pkg).append(',');
-        }
-        for (String pkg : excludes) {
-            buf.append('!').append(pkg).append(',');
-        }
+        String argument = mergeToPackageExpression(includes, excludes);
 
         ClassLoader classLoader = application.getClassLoader();
         log.info("easyetl scanner classLoader {}", (classLoader == null ? "" : classLoader.getClass().getName()));
         log.info("easyetl includeds package {}", StringUtils.join(includes, ","));
         log.info("easyetl excludeds package {}", StringUtils.join(excludes, ","));
-        BeanContext context = new BeanContext(classLoader, buf.toString());
-        Ensure.notnull(context);
+        long start = System.currentTimeMillis();
+        Ensure.notnull(new BeanContext(classLoader, argument));
+        log.info("easyetl initialization context in " + (System.currentTimeMillis() - start) + " ms ..");
     }
+
+    private static String mergeToPackageExpression(List<String> includes, List<String> excludes) {
+        StringBuilder buf = new StringBuilder(100);
+        for (String pkg : includes) {
+            buf.append(pkg).append(',');
+        }
+
+        // 添加排除包名
+        for (String pkg : excludes) {
+            buf.append('!').append(pkg).append(',');
+        }
+
+        return StringUtils.replaceLast(buf.toString(), ",", "");
+    }
+
 }

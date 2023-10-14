@@ -46,32 +46,30 @@ public class EasyETLRunListener implements SpringApplicationRunListener {
     }
 
     public void starting() {
-
     }
 
     public void environmentPrepared(ConfigurableEnvironment environment) {
-
     }
 
     public void contextPrepared(ConfigurableApplicationContext context) {
-
     }
 
     public void contextLoaded(ConfigurableApplicationContext context) {
-
     }
 
     /**
-     * SpringBoot应用启动成功后，再启动easyetl
+     * 为了兼容SpringBoot不通版本
      *
-     * @param context   the application context or null if a failure occurred before the
-     *                  context was created
-     * @param exception any run exception or null if run completed successfully.
+     * @param context 上下文信息
      */
-    public void finished(ConfigurableApplicationContext context, Throwable exception) {
+    public void started(ConfigurableApplicationContext context) {
         if (notstart.getAndSet(false)) {
             EasyETLStarter.run(this.application, this.args, log);
         }
+    }
+
+    public void finished(ConfigurableApplicationContext context, Throwable exception) {
+        this.started(context);
     }
 
 }
