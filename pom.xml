@@ -3,37 +3,27 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>icu.etl</groupId>
+        <artifactId>easyetl-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../easyetl-parent</relativePath>
+    </parent>
 
-    <groupId>icu.etl</groupId>
     <artifactId>easyetl-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <version>${easyetl.project.version}</version>
 
     <dependencies>
+        <dependency>
+            <groupId>icu.etl</groupId>
+            <artifactId>easyetl-script</artifactId>
+            <scope>compile</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>1.5.10.RELEASE</version>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <version>1.5.10.RELEASE</version>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>icu.etl</groupId>
-            <artifactId>easyetl-script</artifactId>
-            <version>1.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
