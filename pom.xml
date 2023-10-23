@@ -16,8 +16,16 @@
     <dependencies>
         <dependency>
             <groupId>icu.etl</groupId>
+            <artifactId>easyetl</artifactId>
+            <version>${easyetl.project.version}-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>icu.etl</groupId>
             <artifactId>easyetl-script</artifactId>
             <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>

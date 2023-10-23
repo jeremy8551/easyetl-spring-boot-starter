@@ -20,9 +20,6 @@ public class EasyETLRunListener implements SpringApplicationRunListener {
     /** 日志接口 */
     private static Logger log = LoggerFactory.getLogger(EasyETLRunListener.class);
 
-    /** 在启动多个监听器实例的场景下，防止多次执行初始化操作 */
-    private final static AtomicBoolean notinit = new AtomicBoolean(true);
-
     /** 在启动多个监听器实例的场景下，防止多次启动 easyetl 组件 */
     private final static AtomicBoolean notstart = new AtomicBoolean(true);
 
@@ -39,10 +36,8 @@ public class EasyETLRunListener implements SpringApplicationRunListener {
      * @param args        SpringBoot应用的启动参数
      */
     public EasyETLRunListener(SpringApplication application, String[] args) {
-        if (notinit.getAndSet(false)) {
-            this.application = application;
-            this.args = args;
-        }
+        this.application = application;
+        this.args = args;
     }
 
     public void starting() {

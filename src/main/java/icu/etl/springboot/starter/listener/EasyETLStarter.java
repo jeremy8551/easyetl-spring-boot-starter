@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import icu.etl.ioc.BeanContext;
+import icu.etl.ioc.EasyetlContext;
 import icu.etl.util.ArrayUtils;
 import icu.etl.util.ClassUtils;
-import icu.etl.util.Ensure;
 import icu.etl.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -21,6 +21,9 @@ import org.springframework.context.annotation.ComponentScan;
  * @createtime 2023/10/4
  */
 public class EasyETLStarter {
+
+    /** 组件容器的上下文信息 */
+    public static EasyetlContext CONTEXT;
 
     /**
      * 启动 easyetl 组件
@@ -55,14 +58,16 @@ public class EasyETLStarter {
             }
         }
 
+        // 打印参数信息
         String argument = mergeToPackageExpression(includes, excludes);
-
         ClassLoader classLoader = application.getClassLoader();
         log.info("easyetl scanner classLoader {}", (classLoader == null ? "" : classLoader.getClass().getName()));
         log.info("easyetl includeds package {}", StringUtils.join(includes, ","));
         log.info("easyetl excludeds package {}", StringUtils.join(excludes, ","));
+
+        // 初始化组件容器的上下文信息
         long start = System.currentTimeMillis();
-        Ensure.notnull(new BeanContext(classLoader, argument));
+        CONTEXT = new BeanContext(classLoader, argument);
         log.info("easyetl initialization context in " + (System.currentTimeMillis() - start) + " ms ..");
     }
 
