@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import icu.etl.ioc.BeanContext;
+import icu.etl.ioc.AnnotationEasyetlContext;
 import icu.etl.ioc.EasyetlContext;
 import icu.etl.util.ArrayUtils;
 import icu.etl.util.ClassUtils;
@@ -67,7 +67,7 @@ public class EasyETLStarter {
 
         // 初始化组件容器的上下文信息
         long start = System.currentTimeMillis();
-        CONTEXT = new BeanContext(classLoader, argument);
+        CONTEXT = new AnnotationEasyetlContext(classLoader, argument);
         log.info("easyetl initialization context in " + (System.currentTimeMillis() - start) + " ms ..");
     }
 
