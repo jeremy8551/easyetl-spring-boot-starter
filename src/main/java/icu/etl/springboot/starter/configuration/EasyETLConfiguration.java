@@ -6,11 +6,9 @@ import icu.etl.ioc.NationalHoliday;
 import icu.etl.script.UniversalScriptEngine;
 import icu.etl.script.UniversalScriptEngineFactory;
 import icu.etl.springboot.starter.listener.EasyETLStarter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -28,9 +26,6 @@ import org.springframework.context.annotation.ScopedProxyMode;
 @ConditionalOnClass(UniversalScriptEngineFactory.class)
 @EnableConfigurationProperties(EasyETLProperties.class)
 public class EasyETLConfiguration {
-
-    @Autowired
-    private ApplicationContext context;
 
     @Bean
     public EasyetlContext getBeanContext() {
@@ -51,12 +46,12 @@ public class EasyETLConfiguration {
 
     @Bean
     public NationalHoliday getNationalHoliday() {
-        return this.getBeanContext().get(NationalHoliday.class);
+        return this.getBeanContext().getBean(NationalHoliday.class);
     }
 
     @Bean
     public Codepage getCodepage() {
-        return this.getBeanContext().get(Codepage.class);
+        return this.getBeanContext().getBean(Codepage.class);
     }
 
 }
