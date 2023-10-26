@@ -2,6 +2,7 @@ package icu.etl.springboot.starter.script;
 
 import java.util.Map;
 
+import icu.etl.annotation.EasyBean;
 import icu.etl.ioc.EasyetlContext;
 import icu.etl.ioc.EasyetlContextAware;
 import icu.etl.script.UniversalScriptAnalysis;
@@ -15,9 +16,12 @@ import icu.etl.script.compiler.ScriptAnalysis;
 import org.springframework.context.ApplicationContext;
 
 /**
+ * Spring版本，主要区别是替换字符串中的变量时，增加了从Spring容器中取值（即：从application.yaml中取值）
+ *
  * @author jeremy8551@qq.com
  * @createtime 2023/10/25
  */
+@EasyBean(level = 1)
 public class SpringScriptAnalysis extends ScriptAnalysis implements UniversalScriptAnalysis, EasyetlContextAware {
 
     /** 容器上下文信息 */
@@ -40,9 +44,9 @@ public class SpringScriptAnalysis extends ScriptAnalysis implements UniversalScr
         UniversalScriptStderr stderr = context.getStderr();
         UniversalScriptVariable localVariable = context.getLocalVariable();
         UniversalScriptVariable globalVariable = context.getGlobalVariable();
-        SpringEnvironmentMap springEnv = new SpringEnvironmentMap(this.context.getBean(ApplicationContext.class));
         UniversalScriptFormatter format = context.getFormatter();
         Map<String, Object> variables = session.getVariables();
+        SpringEnvironmentMap springEnv = new SpringEnvironmentMap(this.context.getBean(ApplicationContext.class));
 
         str = this.replaceSubCommand(session, context, stdout, stderr, str, false);
         str = this.replaceShellSpecialVariable(session, str, false);
@@ -64,6 +68,7 @@ public class SpringScriptAnalysis extends ScriptAnalysis implements UniversalScr
         UniversalScriptVariable globalVariable = context.getGlobalVariable();
         UniversalScriptFormatter format = context.getFormatter();
         Map<String, Object> variables = session.getVariables();
+        SpringEnvironmentMap springEnv = new SpringEnvironmentMap(this.context.getBean(ApplicationContext.class));
 
         if (evalInnerCmd) {
             str = this.replaceSubCommand(session, context, stdout, stderr, str, true);
@@ -73,6 +78,7 @@ public class SpringScriptAnalysis extends ScriptAnalysis implements UniversalScr
         str = this.replaceShellVariable(str, localVariable, format, true, true);
         str = this.replaceShellVariable(str, globalVariable, format, true, true);
         str = this.replaceShellVariable(str, variables, format, true, keepVariable);
+        str = this.replaceShellVariable(str, springEnv, format, true, true);
         if (escape) { // 一定要在替换完字符串中变量之后再执行 {@link #unescapeSQL(String)} 方法
             str = this.unescapeSQL(str);
         }

@@ -8,23 +8,25 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 
 /**
+ * 代理类，从Spring容器的Environment中取值
+ *
  * @author jeremy8551@qq.com
  * @createtime 2023/10/25
  */
 public class SpringEnvironmentMap implements Map<String, String> {
 
-    private Environment map;
+    private Environment env;
 
     public SpringEnvironmentMap(ApplicationContext context) {
-        this.map = context.getEnvironment();
+        this.env = context.getEnvironment();
     }
 
     public boolean containsKey(Object key) {
-        return this.map.containsProperty((String) key);
+        return this.env.containsProperty((String) key);
     }
 
     public String get(Object key) {
-        return this.map.getProperty((String) key);
+        return this.env.getProperty((String) key);
     }
 
     public int size() {

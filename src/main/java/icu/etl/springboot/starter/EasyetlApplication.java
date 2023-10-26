@@ -1,19 +1,19 @@
-package icu.etl.springboot.starter.listener;
+package icu.etl.springboot.starter;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import icu.etl.ioc.AnnotationBeanClass;
 import icu.etl.ioc.AnnotationEasyetlContext;
-import icu.etl.ioc.EasyetlContext;
-import icu.etl.script.UniversalScriptAnalysis;
+import icu.etl.springboot.starter.ioc.SpringBeanInfo;
+import icu.etl.springboot.starter.ioc.SpringEasyetlIoc;
 import icu.etl.util.ArrayUtils;
 import icu.etl.util.ClassUtils;
 import icu.etl.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -22,15 +22,12 @@ import org.springframework.context.annotation.ComponentScan;
  * @author jeremy8551@qq.com
  * @createtime 2023/10/4
  */
-public class EasyETLStarter {
-
-    /** 组件容器的上下文信息 */
-    public static EasyetlContext CONTEXT;
+public class EasyetlApplication {
 
     /**
      * 启动 easyetl 组件
      */
-    public static void run(SpringApplication application, String[] args, Logger log) {
+    public static void run(ConfigurableApplicationContext springContext, SpringApplication application, String[] args, Logger log) {
         if (application == null) {
             log.error("easyetl-spring-boot-starter start fail!");
             throw new NullPointerException();
@@ -69,9 +66,10 @@ public class EasyETLStarter {
 
         // 初始化组件容器的上下文信息
         long start = System.currentTimeMillis();
-        CONTEXT = new AnnotationEasyetlContext(classLoader, argument);
-        CONTEXT.removeBeanClass(UniversalScriptAnalysis.class);
-        CONTEXT.addBean(new AnnotationBeanClass(UniversalScriptAnalysis.class), null);
+        AnnotationEasyetlContext context = new AnnotationEasyetlContext(classLoader, argument);
+        context.addIoc(new SpringEasyetlIoc(springContext));
+        context.addBean(new SpringBeanInfo(springContext), null);
+        springContext.getBeanFactory().registerSingleton("", context);
         log.info("easyetl initialization context in " + (System.currentTimeMillis() - start) + " ms ..");
     }
 

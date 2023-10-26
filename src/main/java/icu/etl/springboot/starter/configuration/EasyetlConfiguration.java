@@ -5,10 +5,9 @@ import icu.etl.ioc.EasyetlContext;
 import icu.etl.ioc.NationalHoliday;
 import icu.etl.script.UniversalScriptEngine;
 import icu.etl.script.UniversalScriptEngineFactory;
-import icu.etl.springboot.starter.listener.EasyETLStarter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -21,37 +20,38 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * @author jeremy8551@qq.com
  * @createtime 2023/10/3
  */
-@Lazy
+
 @Configuration
 @ConditionalOnClass(UniversalScriptEngineFactory.class)
-@EnableConfigurationProperties(EasyETLProperties.class)
-public class EasyETLConfiguration {
+public class EasyetlConfiguration {
 
-    @Bean
-    public EasyetlContext getBeanContext() {
-        return EasyETLStarter.CONTEXT;
-    }
+    @Autowired
+    private EasyetlContext context;
 
+    @Lazy
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
     public UniversalScriptEngine getScriptEngine() {
         return this.getScriptEngineFactory().getScriptEngine();
     }
 
+    @Lazy
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
     public UniversalScriptEngineFactory getScriptEngineFactory() {
-        return new UniversalScriptEngineFactory(this.getBeanContext());
+        return new UniversalScriptEngineFactory(context);
     }
 
+    @Lazy
     @Bean
     public NationalHoliday getNationalHoliday() {
-        return this.getBeanContext().getBean(NationalHoliday.class);
+        return context.getBean(NationalHoliday.class);
     }
 
+    @Lazy
     @Bean
     public Codepage getCodepage() {
-        return this.getBeanContext().getBean(Codepage.class);
+        return context.getBean(Codepage.class);
     }
 
 }
