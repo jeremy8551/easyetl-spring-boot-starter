@@ -68,8 +68,8 @@ public class EasyetlApplication {
         long start = System.currentTimeMillis();
         AnnotationEasyetlContext context = new AnnotationEasyetlContext(classLoader, argument);
         context.addIoc(new SpringEasyetlIoc(springContext));
-        context.addBean(new SpringBeanInfo(springContext), null);
-        springContext.getBeanFactory().registerSingleton("", context);
+        context.addBean(new SpringBeanInfo(springContext));
+        springContext.getBeanFactory().registerSingleton("easyetl", context);
         log.info("easyetl initialization context in " + (System.currentTimeMillis() - start) + " ms ..");
     }
 

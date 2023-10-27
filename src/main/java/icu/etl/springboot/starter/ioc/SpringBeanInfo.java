@@ -1,13 +1,13 @@
 package icu.etl.springboot.starter.ioc;
 
-import icu.etl.ioc.AnnotationBeanInfoRegister;
+import icu.etl.ioc.AnnotationBeanInfo;
 import org.springframework.context.ApplicationContext;
 
 /**
  * @author jeremy8551@qq.com
  * @createtime 2023/10/26
  */
-public class SpringBeanInfo extends AnnotationBeanInfoRegister {
+public class SpringBeanInfo extends AnnotationBeanInfo {
 
     /**
      * 初始化
