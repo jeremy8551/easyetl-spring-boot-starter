@@ -27,7 +27,7 @@ public class SpringIocContext implements IocContext {
     @SuppressWarnings("unchecked")
     public <E> E getBean(Class<E> cls, Object[] args) {
         if (args.length == 0) {
-            return springContext.getBean(cls);
+            return this.springContext.getBean(cls);
         }
 
         if (args[0] instanceof String) {
