@@ -3,6 +3,7 @@ package icu.etl.springboot.starter.script;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import javax.script.Bindings;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
@@ -13,20 +14,28 @@ import org.springframework.core.env.Environment;
  * @author jeremy8551@qq.com
  * @createtime 2023/10/25
  */
-public class SpringEnvironmentMap implements Map<String, String> {
+public class SpringEasyEnvironment implements Bindings {
 
     private Environment env;
 
-    public SpringEnvironmentMap(ApplicationContext context) {
+    public SpringEasyEnvironment(ApplicationContext context) {
         this.env = context.getEnvironment();
     }
 
     public boolean containsKey(Object key) {
-        return this.env.containsProperty((String) key);
+        return this.env.getProperty((String) key) != null;
     }
 
     public String get(Object key) {
         return this.env.getProperty((String) key);
+    }
+
+    public Object put(String name, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void putAll(Map<? extends String, ?> toMerge) {
+        throw new UnsupportedOperationException();
     }
 
     public int size() {
@@ -49,10 +58,6 @@ public class SpringEnvironmentMap implements Map<String, String> {
         throw new UnsupportedOperationException();
     }
 
-    public void putAll(Map<? extends String, ? extends String> m) {
-        throw new UnsupportedOperationException();
-    }
-
     public void clear() {
         throw new UnsupportedOperationException();
     }
@@ -61,11 +66,12 @@ public class SpringEnvironmentMap implements Map<String, String> {
         throw new UnsupportedOperationException();
     }
 
-    public Collection<String> values() {
+    public Collection<Object> values() {
         throw new UnsupportedOperationException();
     }
 
-    public Set<Entry<String, String>> entrySet() {
+    public Set<Entry<String, Object>> entrySet() {
         throw new UnsupportedOperationException();
     }
+
 }

@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>easyetl-spring-boot-starter</artifactId>
-    <version>${easyetl.project.version}</version>
+    <version>${easyetl.project.version}-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
@@ -19,13 +19,6 @@
             <artifactId>easyetl</artifactId>
             <version>${easyetl.project.version}-SNAPSHOT</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>icu.etl</groupId>
-            <artifactId>easyetl-script</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
         </dependency>
 
         <dependency>

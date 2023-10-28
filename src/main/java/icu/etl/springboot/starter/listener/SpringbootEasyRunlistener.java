@@ -2,7 +2,7 @@ package icu.etl.springboot.starter.listener;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import icu.etl.springboot.starter.EasyetlApplication;
+import icu.etl.springboot.starter.SpringEasyApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -16,10 +16,10 @@ import org.springframework.core.env.ConfigurableEnvironment;
  * @author jeremy8551@qq.com
  * @createtime 2023/10/3
  */
-public class EasyetlRunlistener implements SpringApplicationRunListener {
+public class SpringbootEasyRunlistener implements SpringApplicationRunListener {
 
     /** 日志接口 */
-    private static Logger log = LoggerFactory.getLogger(EasyetlRunlistener.class);
+    private static Logger log = LoggerFactory.getLogger(SpringbootEasyRunlistener.class);
 
     /** 在启动多个监听器实例的场景下，防止多次启动 easyetl 组件 */
     private final static AtomicBoolean notstart = new AtomicBoolean(true);
@@ -36,7 +36,7 @@ public class EasyetlRunlistener implements SpringApplicationRunListener {
      * @param application SpringBoot应用
      * @param args        SpringBoot应用的启动参数
      */
-    public EasyetlRunlistener(SpringApplication application, String[] args) {
+    public SpringbootEasyRunlistener(SpringApplication application, String[] args) {
         this.application = application;
         this.args = args;
     }
@@ -60,7 +60,7 @@ public class EasyetlRunlistener implements SpringApplicationRunListener {
      */
     public void started(ConfigurableApplicationContext context) {
         if (notstart.getAndSet(false)) {
-            EasyetlApplication.run(context, this.application, this.args, log);
+            SpringEasyApplication.run(context, this.application, this.args, log);
         }
     }
 
