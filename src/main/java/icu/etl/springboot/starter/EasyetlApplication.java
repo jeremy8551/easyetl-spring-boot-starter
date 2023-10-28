@@ -4,9 +4,9 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import icu.etl.ioc.AnnotationEasyetlContext;
+import icu.etl.ioc.EasyBeanContext;
 import icu.etl.springboot.starter.ioc.SpringBeanInfo;
-import icu.etl.springboot.starter.ioc.SpringEasyetlIoc;
+import icu.etl.springboot.starter.ioc.SpringIocContext;
 import icu.etl.util.ArrayUtils;
 import icu.etl.util.ClassUtils;
 import icu.etl.util.StringUtils;
@@ -66,8 +66,8 @@ public class EasyetlApplication {
 
         // 初始化组件容器的上下文信息
         long start = System.currentTimeMillis();
-        AnnotationEasyetlContext context = new AnnotationEasyetlContext(classLoader, argument);
-        context.addIoc(new SpringEasyetlIoc(springContext));
+        EasyBeanContext context = new EasyBeanContext(classLoader, argument);
+        context.addIoc(new SpringIocContext(springContext));
         context.addBean(new SpringBeanInfo(springContext));
         springContext.getBeanFactory().registerSingleton("easyetl", context);
         log.info("easyetl initialization context in " + (System.currentTimeMillis() - start) + " ms ..");

@@ -1,23 +1,27 @@
 package icu.etl.springboot.starter.ioc;
 
+import java.util.Objects;
+
 import icu.etl.ioc.BeanArgument;
-import icu.etl.ioc.EasyetlIoc;
+import icu.etl.ioc.IocContext;
 import org.springframework.context.ApplicationContext;
 
 /**
+ * Spring容器上下文的适配器
+ *
  * @author jeremy8551@qq.com
  * @createtime 2023/10/26
  */
-public class SpringEasyetlIoc implements EasyetlIoc {
+public class SpringIocContext implements IocContext {
 
     private ApplicationContext springContext;
 
-    public SpringEasyetlIoc(ApplicationContext springContext) {
-        this.springContext = springContext;
+    public SpringIocContext(ApplicationContext springContext) {
+        this.springContext = Objects.requireNonNull(springContext);
     }
 
     public String getName() {
-        return SpringEasyetlIoc.class.getSimpleName();
+        return SpringIocContext.class.getSimpleName();
     }
 
     @SuppressWarnings("unchecked")

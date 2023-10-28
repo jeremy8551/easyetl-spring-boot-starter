@@ -1,7 +1,7 @@
 package icu.etl.springboot.starter.configuration;
 
 import icu.etl.ioc.Codepage;
-import icu.etl.ioc.EasyetlContext;
+import icu.etl.ioc.EasyContext;
 import icu.etl.ioc.NationalHoliday;
 import icu.etl.script.UniversalScriptEngine;
 import icu.etl.script.UniversalScriptEngineFactory;
@@ -26,7 +26,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 public class EasyetlConfiguration {
 
     @Autowired
-    private EasyetlContext context;
+    private EasyContext context;
 
     @Lazy
     @Bean

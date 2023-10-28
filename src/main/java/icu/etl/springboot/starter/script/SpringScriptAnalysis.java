@@ -3,8 +3,8 @@ package icu.etl.springboot.starter.script;
 import java.util.Map;
 
 import icu.etl.annotation.EasyBean;
-import icu.etl.ioc.EasyetlContext;
-import icu.etl.ioc.EasyetlContextAware;
+import icu.etl.ioc.EasyContext;
+import icu.etl.ioc.EasyContextAware;
 import icu.etl.script.UniversalScriptAnalysis;
 import icu.etl.script.UniversalScriptContext;
 import icu.etl.script.UniversalScriptFormatter;
@@ -22,12 +22,12 @@ import org.springframework.context.ApplicationContext;
  * @createtime 2023/10/25
  */
 @EasyBean(level = 1)
-public class SpringScriptAnalysis extends ScriptAnalysis implements UniversalScriptAnalysis, EasyetlContextAware {
+public class SpringScriptAnalysis extends ScriptAnalysis implements UniversalScriptAnalysis, EasyContextAware {
 
     /** 容器上下文信息 */
-    protected EasyetlContext context;
+    protected EasyContext context;
 
-    public void setContext(EasyetlContext context) {
+    public void setContext(EasyContext context) {
         this.context = context;
     }
 
