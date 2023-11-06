@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=icu.etl.springboot.starter.configuration.SpringEasyConfiguration
+org.springframework.boot.SpringApplicationRunListener=icu.etl.springboot.starter.listener.SpringbootEasyRunlistener

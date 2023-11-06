@@ -3,15 +3,73 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>icu.etl</groupId>
+        <artifactId>easyetl-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../easyetl-parent</relativePath>
+    </parent>
 
-    <groupId>icu.etl</groupId>
     <artifactId>easyetl-spring-boot-starter</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${revision}</version>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-    
+    <dependencies>
+        <dependency>
+            <groupId>icu.etl</groupId>
+            <artifactId>easyetl</artifactId>
+            <version>${revision}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>icu.etl</groupId>
+                <artifactId>easyetl-maven-plugin</artifactId>
+                <version>${revision}</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>uninstall-project</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>uninstall</goal> <!-- 从本地仓库中卸载jar包 -->
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <version>all</version> <!-- 卸载jar包的版本 -->
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
