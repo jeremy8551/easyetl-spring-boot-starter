@@ -9,6 +9,7 @@ import icu.etl.springboot.starter.ioc.SpringEasyBeanInfo;
 import icu.etl.springboot.starter.ioc.SpringIocContext;
 import icu.etl.util.ArrayUtils;
 import icu.etl.util.ClassUtils;
+import icu.etl.util.FileUtils;
 import icu.etl.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -24,6 +25,12 @@ import org.springframework.context.annotation.ComponentScan;
  */
 public class SpringEasyApplication {
 
+    /** 应用上下文信息在Spring容器中的名字 */
+    public final static String APP_SPRING_BEANNAME = "easyetl";
+
+    /** 应用名 */
+    public final static String APP_NAME = "easyetl-spring-boot-starter";
+
     /**
      * 启动 easyetl
      *
@@ -33,18 +40,16 @@ public class SpringEasyApplication {
      * @param log           日志接口
      */
     public static synchronized void run(ConfigurableApplicationContext springContext, SpringApplication application, String[] args, Logger log) {
-        String app = "easyetl-spring-boot-starter";
-        String beanName = EasyBeanContext.class.getSimpleName();
-        if (springContext.getBeanFactory().containsBeanDefinition(beanName)) { // 判断Spring容器中，是否已经注册了脚本引擎上下文信息
+        if (springContext.getBeanFactory().containsBeanDefinition(APP_SPRING_BEANNAME)) { // 判断Spring容器中，是否已经注册了脚本引擎上下文信息
             return;
         }
 
         long start = System.currentTimeMillis();
         if (application == null) {
-            log.error("{} start fail!", app);
+            log.error("{} start fail!", APP_NAME);
             throw new NullPointerException();
         } else {
-            log.info("{} starting ..", app);
+            log.info("{} starting ..", APP_NAME);
         }
 
         Class<?> cls = application.getMainApplicationClass();
@@ -72,16 +77,40 @@ public class SpringEasyApplication {
         // 打印参数信息
         String argument = mergeToPackage(includes, excludes);
         ClassLoader classLoader = application.getClassLoader();
-        log.info("{} classLoader {}", app, (classLoader == null ? "" : classLoader.getClass().getName()));
-        log.info("{} includeds package {}", app, StringUtils.join(includes, ","));
-        log.info("{} excludeds package {}", app, StringUtils.join(excludes, ","));
+
+        // 判断在测试环境下运行
+        if (includes.isEmpty()) {
+            addTestPackage(includes, classLoader);
+        }
+
+        log.info("{} classLoader {}", APP_NAME, (classLoader == null ? "" : classLoader.getClass().getName()));
+        log.info("{} includeds package {}", APP_NAME, StringUtils.join(includes, ","));
+        log.info("{} excludeds package {}", APP_NAME, StringUtils.join(excludes, ","));
 
         // 初始化组件容器的上下文信息
         EasyBeanContext context = new EasyBeanContext(classLoader, argument);
         context.addIoc(new SpringIocContext(springContext)); // 添加Spring容器上下文信息
         context.addBean(new SpringEasyBeanInfo(springContext)); // 将Spring容器上下文信息作为单例存储到容器中
-        springContext.getBeanFactory().registerSingleton(beanName, context); // 将Easyetl容器注册到Spring上下文中
-        log.info("{} initialization in " + (System.currentTimeMillis() - start) + " ms ..", app);
+
+        springContext.getBeanFactory().registerSingleton(APP_SPRING_BEANNAME, context); // 将Easyetl容器注册到Spring上下文中
+        log.info("{} initialization in " + (System.currentTimeMillis() - start) + " ms ..", APP_NAME);
+    }
+
+    /**
+     * 检查在测试环境下，有哪些包可以扫描
+     *
+     * @param includes    扫描包集合
+     * @param classLoader 类加载器
+     */
+    public static void addTestPackage(List<String> includes, ClassLoader classLoader) {
+        String[] array = ClassUtils.getJavaClassPath();
+        ArrayList<String> list = new ArrayList<String>();
+        for (String path : array) {
+            if (FileUtils.isDirectory(path)) {
+                list.addAll(ClassUtils.findShortPackage(classLoader, path));
+            }
+        }
+        includes.addAll(ClassUtils.mergePackage(list));
     }
 
     /**
