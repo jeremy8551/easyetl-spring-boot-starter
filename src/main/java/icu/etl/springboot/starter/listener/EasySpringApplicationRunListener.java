@@ -1,6 +1,6 @@
 package icu.etl.springboot.starter.listener;
 
-import icu.etl.springboot.starter.SpringEasyApplication;
+import icu.etl.springboot.starter.EasySpringApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -14,10 +14,10 @@ import org.springframework.core.env.ConfigurableEnvironment;
  * @author jeremy8551@qq.com
  * @createtime 2023/10/3
  */
-public class SpringbootEasyRunlistener implements SpringApplicationRunListener {
+public class EasySpringApplicationRunListener implements SpringApplicationRunListener {
 
     /** 日志接口 */
-    private final static Logger log = LoggerFactory.getLogger(SpringbootEasyRunlistener.class);
+    private final static Logger log = LoggerFactory.getLogger(EasySpringApplicationRunListener.class);
 
     /** 当前SpringBoot应用 */
     private SpringApplication application;
@@ -31,7 +31,7 @@ public class SpringbootEasyRunlistener implements SpringApplicationRunListener {
      * @param application SpringBoot应用
      * @param args        SpringBoot应用的启动参数
      */
-    public SpringbootEasyRunlistener(SpringApplication application, String[] args) {
+    public EasySpringApplicationRunListener(SpringApplication application, String[] args) {
         this.application = application;
         this.args = args;
     }
@@ -49,16 +49,16 @@ public class SpringbootEasyRunlistener implements SpringApplicationRunListener {
     }
 
     /**
-     * 为了兼容SpringBoot不通版本
+     * 为了兼容不同版本的SpringBoot
      *
-     * @param context 上下文信息
+     * @param context 容器上下文信息
      */
     public void started(ConfigurableApplicationContext context) {
-        SpringEasyApplication.run(context, this.application, this.args, log);
+        EasySpringApplication.run(context, this.application, this.args, log);
     }
 
     public void finished(ConfigurableApplicationContext context, Throwable exception) {
-        this.started(context);
+        EasySpringApplication.run(context, this.application, this.args, log);
     }
 
 }

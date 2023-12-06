@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.script.Bindings;
 
+import icu.etl.util.Ensure;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 
@@ -14,12 +15,12 @@ import org.springframework.core.env.Environment;
  * @author jeremy8551@qq.com
  * @createtime 2023/10/25
  */
-public class SpringScriptEnvironment implements Bindings {
+public class EasySpringEnvironment implements Bindings {
 
     private Environment env;
 
-    public SpringScriptEnvironment(ApplicationContext context) {
-        this.env = context.getEnvironment();
+    public EasySpringEnvironment(ApplicationContext context) {
+        this.env = Ensure.notNull(context).getEnvironment();
     }
 
     public boolean containsKey(Object key) {

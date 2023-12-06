@@ -1,6 +1,5 @@
 package icu.etl.springboot.starter.listener;
 
-import icu.etl.springboot.starter.SpringEasyApplication;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -10,7 +9,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
  * @author jeremy8551@qq.com
  * @createtime 2023/11/8
  */
-public class SpringEasyApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
+public class EasySpringApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
 
     /**
      * 通知Spring已启动完毕，可以启动应用
@@ -18,6 +17,6 @@ public class SpringEasyApplicationListener implements ApplicationListener<Contex
      * @param event the event to respond to
      */
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        SpringEasyApplication.SPRING_CONTEXT_REFRESHED.getAndSet(true);
+//        EasySpringApplication.SPRING_CONTEXT_REFRESHED.set(true);
     }
 }

@@ -1,9 +1,8 @@
 package icu.etl.springboot.starter.ioc;
 
-import java.util.Objects;
-
-import icu.etl.ioc.BeanArgument;
-import icu.etl.ioc.IocContext;
+import icu.etl.ioc.EasyContainerContext;
+import icu.etl.ioc.impl.BeanArgument;
+import icu.etl.util.Ensure;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -12,7 +11,7 @@ import org.springframework.context.ApplicationContext;
  * @author jeremy8551@qq.com
  * @createtime 2023/10/26
  */
-public class SpringIocContext implements IocContext {
+public class SpringIocContext implements EasyContainerContext {
 
     /** Spring容器上下文信息 */
     private ApplicationContext springContext;
@@ -23,7 +22,7 @@ public class SpringIocContext implements IocContext {
      * @param springContext Spring容器上下文信息
      */
     public SpringIocContext(ApplicationContext springContext) {
-        this.springContext = Objects.requireNonNull(springContext);
+        this.springContext = Ensure.notNull(springContext);
     }
 
     public String getName() {

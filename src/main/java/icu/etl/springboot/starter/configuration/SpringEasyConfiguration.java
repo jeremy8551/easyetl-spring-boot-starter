@@ -1,12 +1,12 @@
 package icu.etl.springboot.starter.configuration;
 
-import icu.etl.ioc.Codepage;
+import icu.etl.cn.NationalHoliday;
+import icu.etl.io.Codepage;
 import icu.etl.ioc.EasyContext;
-import icu.etl.ioc.NationalHoliday;
 import icu.etl.script.UniversalScriptContext;
 import icu.etl.script.UniversalScriptEngine;
 import icu.etl.script.UniversalScriptEngineFactory;
-import icu.etl.springboot.starter.script.SpringScriptEnvironment;
+import icu.etl.springboot.starter.script.EasySpringEnvironment;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +31,7 @@ public class SpringEasyConfiguration {
     public UniversalScriptEngine getScriptEngine(EasyContext context, ApplicationContext springContext) {
         UniversalScriptEngineFactory factory = this.getScriptEngineFactory(context);
         UniversalScriptEngine engine = factory.getScriptEngine();
-        SpringScriptEnvironment bindings = new SpringScriptEnvironment(springContext);
+        EasySpringEnvironment bindings = new EasySpringEnvironment(springContext);
         engine.setBindings(bindings, UniversalScriptContext.ENVIRONMENT_SCOPE);
         return engine;
     }

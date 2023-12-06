@@ -1,6 +1,6 @@
 package icu.etl.springboot.starter.ioc;
 
-import icu.etl.ioc.EasyBeanInfo;
+import icu.etl.ioc.impl.EasyBeanInfoImpl;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
  * @author jeremy8551@qq.com
  * @createtime 2023/10/26
  */
-public class SpringEasyBeanInfo extends EasyBeanInfo {
+public class SpringEasyBeanInfo extends EasyBeanInfoImpl {
 
     /**
      * 将 Spring 容器上下文信息转为 Easyetl 中可识别的组件信息
@@ -17,7 +17,7 @@ public class SpringEasyBeanInfo extends EasyBeanInfo {
      * @param springContext Spring 容器上下文信息
      */
     public SpringEasyBeanInfo(ApplicationContext springContext) {
-        super(ApplicationContext.class);
+        super(springContext.getClass());
         this.singleton = true;
         this.setBean(springContext);
     }
