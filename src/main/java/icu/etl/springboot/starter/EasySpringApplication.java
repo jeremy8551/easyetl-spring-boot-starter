@@ -85,6 +85,9 @@ public class EasySpringApplication {
         // 开始启动
         log.info("{} starting ..", springbootStarterName);
 
+        // 打印日志接口
+        log.info("{} slf4j Logger is {}", springbootStarterName, log.getClass().getName());
+
         // 设置默认的类加载器
         if (classLoader == null) {
             classLoader = springContext.getClassLoader();
@@ -137,16 +140,16 @@ public class EasySpringApplication {
         EasyBeanContext context = new EasyBeanContext(classLoader);
         context.setArgument(args);
         context.loadBeanInfo(list.toArray());
-        context.setParent(findEasyContext(springContext, applicationName, log));
+        context.setParent(findEasyContext(springbootStarterName, springContext, applicationName, log));
         context.addIoc(new SpringIocContext(springContext)); // 添加Spring容器上下文信息
         context.addBean(new SpringEasyBeanInfo(springContext)); // 将Spring容器上下文信息作为单例存储到容器中
 
         // 将容器注册到Spring中
-        log.info("SpringContext: id={}, appName={}, displayName={}", springContext.getId(), springContext.getApplicationName(), springContext.getDisplayName());
+        log.info("{} register to {}[id={}, appName={}, displayName={}]", springbootStarterName, springContext.getClass().getName(), springContext.getId(), springContext.getApplicationName(), springContext.getDisplayName());
         springContext.getBeanFactory().registerSingleton(applicationName, context);
 
         // 在Spring容器中查找可用的线程池
-        findThreadPool(springContext, context, log);
+        findThreadPool(springbootStarterName, springContext, context, log);
 
         // 打印启动成功标志
         log.info("{} initialization in {} ms ..", springbootStarterName, (System.currentTimeMillis() - start));
@@ -155,11 +158,12 @@ public class EasySpringApplication {
     /**
      * 在Spring容器中查找可用的线程池
      *
-     * @param springContext Spring容器
-     * @param context       easyetl容器
-     * @param log           日志接口
+     * @param springbootStarterName 场景启动器名
+     * @param springContext         Spring容器
+     * @param context               easyetl容器
+     * @param log                   日志接口
      */
-    private static void findThreadPool(ConfigurableApplicationContext springContext, EasyBeanContext context, Logger log) {
+    private static void findThreadPool(String springbootStarterName, ConfigurableApplicationContext springContext, EasyBeanContext context, Logger log) {
         ThreadSource source = context.getBean(ThreadSource.class);
         if (source == null) {
             return;
@@ -169,7 +173,7 @@ public class EasySpringApplication {
         try {
             ThreadPoolTaskExecutor pool = (ThreadPoolTaskExecutor) springContext.getBean("taskExecutor");
             if (pool != null) {
-                log.info("Springboot taskExecutor: {}", pool);
+                log.info("{} use Springboot taskExecutor {}", springbootStarterName, pool);
                 source.setExecutorsFactory(new SpringExecutorsFactory(pool));
                 return;
             }
@@ -183,7 +187,7 @@ public class EasySpringApplication {
         try {
             ThreadPoolTaskExecutor service = springContext.getBean(ThreadPoolTaskExecutor.class);
             if (service != null) {
-                log.info("Spring ThreadPoolTaskExecutor: {}", service);
+                log.info("{} use Spring ThreadPoolTaskExecutor {}", springbootStarterName, service);
                 source.setExecutorsFactory(new SpringExecutorsFactory(service));
                 return;
             }
@@ -197,7 +201,7 @@ public class EasySpringApplication {
         try {
             ExecutorService service = springContext.getBean(ExecutorService.class);
             if (service != null) {
-                log.info("Spring ExecutorService: {}", service);
+                log.info("{} use Spring ExecutorService {}", springbootStarterName, service);
                 source.setExecutorsFactory(new SpringExecutorsFactory(service));
                 return;
             }
@@ -208,22 +212,23 @@ public class EasySpringApplication {
         }
 
         // 没有发现可用的线程池
-        log.info("No available thread pools found in Spring!");
+        log.info("{} did not find any available thread pools in SpringContext!", springbootStarterName);
     }
 
     /**
      * 在Spring上级容器中查找bean
      *
-     * @param springContext   Spring容器
-     * @param applicationName bean名
-     * @param log             日志接口
+     * @param springbootStarterName 场景启动器名
+     * @param springContext         Spring容器
+     * @param applicationName       bean名
+     * @param log                   日志接口
      * @return 容器
      */
-    protected static EasyBeanContext findEasyContext(ConfigurableApplicationContext springContext, String applicationName, Logger log) {
+    protected static EasyBeanContext findEasyContext(String springbootStarterName, ConfigurableApplicationContext springContext, String applicationName, Logger log) {
         ApplicationContext parent = springContext;
         while ((parent = parent.getParent()) != null) {
             if (parent.containsBeanDefinition(applicationName)) {
-                log.info("SpringContext id={} already contains {} ..", parent.getId(), applicationName);
+                log.info("{} discover {}[id={}] already contains {} ..", springbootStarterName, springContext.getClass().getName(), parent.getId(), applicationName);
                 EasyBeanContext context = (EasyBeanContext) parent.getBean(applicationName);
                 if (context != null) {
                     return context;
