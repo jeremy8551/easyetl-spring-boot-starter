@@ -16,7 +16,6 @@ import icu.etl.util.ArrayUtils;
 import icu.etl.util.ClassUtils;
 import icu.etl.util.Ensure;
 import icu.etl.util.FileUtils;
-import icu.etl.util.Settings;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -63,8 +62,8 @@ public class EasySpringApplication {
         LogFactory.getContext().setBuilder(new Slf4jLogBuilder());
 
         Ensure.notNull(springContext);
-        String applicationName = Settings.getApplicationName(); // 应用名
-        String springbootStarterName = applicationName + "-spring-boot-starter"; // 场景启动器名
+        String applicationName = icu.etl.ProjectPom.getArtifactID(); // 应用名
+        String springbootStarterName = ProjectPom.getArtifactID(); // 场景启动器名
 
         // SpringCloud 启动时不执行第一次（只执行第二次）
         if ("bootstrap".equalsIgnoreCase(springContext.getId())) {
@@ -160,7 +159,7 @@ public class EasySpringApplication {
      *
      * @param springbootStarterName 场景启动器名
      * @param springContext         Spring容器
-     * @param context               easyetl容器
+     * @param context               容器
      * @param log                   日志接口
      */
     private static void findThreadPool(String springbootStarterName, ConfigurableApplicationContext springContext, EasyBeanContext context, Logger log) {

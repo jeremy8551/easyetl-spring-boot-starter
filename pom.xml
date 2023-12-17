@@ -42,4 +42,24 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>icu.etl</groupId>
+                <artifactId>easyetl-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>pom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <packageName>icu.etl.springboot.starter</packageName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
