@@ -58,6 +58,7 @@ public class EasySpringApplication {
      */
     public static synchronized void run(ClassLoader classLoader, ConfigurableApplicationContext springContext, Class<?> mainApplicationClass, String[] args, Logger log) {
         long start = System.currentTimeMillis();
+        Ensure.notNull(log);
         LogFactory.getContext().setStartMillis(start);
         LogFactory.getContext().setBuilder(new Slf4jLogBuilder());
 
@@ -140,7 +141,7 @@ public class EasySpringApplication {
         context.setArgument(args);
         context.loadBeanInfo(list.toArray());
         context.setParent(findEasyContext(springbootStarterName, springContext, applicationName, log));
-        context.addIoc(new SpringIocContext(springContext)); // 添加Spring容器上下文信息
+        context.addIoc(new SpringIocContext(springContext, log)); // 添加Spring容器上下文信息
         context.addBean(new SpringEasyBeanInfo(springContext)); // 将Spring容器上下文信息作为单例存储到容器中
 
         // 将容器注册到Spring中

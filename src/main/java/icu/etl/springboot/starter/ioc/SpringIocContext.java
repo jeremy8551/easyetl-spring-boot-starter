@@ -3,6 +3,8 @@ package icu.etl.springboot.starter.ioc;
 import icu.etl.ioc.EasyContainerContext;
 import icu.etl.ioc.impl.BeanArgument;
 import icu.etl.util.Ensure;
+import org.slf4j.Logger;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -16,17 +18,22 @@ public class SpringIocContext implements EasyContainerContext {
     /** Spring容器上下文信息 */
     private ApplicationContext springContext;
 
+    /** 日志接口 */
+    private Logger log;
+
     /**
      * 初始化
      *
      * @param springContext Spring容器上下文信息
+     * @param log           日志接口
      */
-    public SpringIocContext(ApplicationContext springContext) {
+    public SpringIocContext(ApplicationContext springContext, Logger log) {
         this.springContext = Ensure.notNull(springContext);
+        this.log = Ensure.notNull(log);
     }
 
     public String getName() {
-        return SpringIocContext.class.getSimpleName();
+        return this.springContext.getId();
     }
 
     @SuppressWarnings("unchecked")
@@ -37,21 +44,43 @@ public class SpringIocContext implements EasyContainerContext {
 
         if (args[0] instanceof String) {
             BeanArgument argument = new BeanArgument(args);
+            E bean = null;
 
             // 组件名和匹配类查询
-            E bean = this.springContext.getBean(argument.getName(), cls);
+            try {
+                bean = this.springContext.getBean(argument.getName(), cls);
+            } catch (BeansException e) {
+                if (log.isDebugEnabled()) {
+                    log.debug(e.getLocalizedMessage(), e);
+                }
+            }
+
             if (bean != null) {
                 return bean;
             }
 
             // args 作为构造方法的参数
-            bean = (E) this.springContext.getBean(argument.getName(), argument.getArgs());
+            try {
+                bean = (E) this.springContext.getBean(argument.getName(), argument.getArgs());
+            } catch (BeansException e) {
+                if (log.isDebugEnabled()) {
+                    log.debug(e.getLocalizedMessage(), e);
+                }
+            }
+
             if (bean != null) {
                 return bean;
             }
 
             // 按组件名查询
-            bean = (E) this.springContext.getBean(argument.getName());
+            try {
+                bean = (E) this.springContext.getBean(argument.getName());
+            } catch (BeansException e) {
+                if (log.isDebugEnabled()) {
+                    log.debug(e.getLocalizedMessage(), e);
+                }
+            }
+
             if (bean != null) {
                 return bean;
             }
