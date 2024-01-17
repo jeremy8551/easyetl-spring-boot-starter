@@ -137,9 +137,7 @@ public class EasySpringApplication {
         log.info("{} class scan pattern is {}", springbootStarterName, list.toArgumentString());
 
         // 初始化容器
-        EasyBeanContext context = new EasyBeanContext(classLoader);
-        context.setArgument(args);
-        context.loadBeanInfo(list.toArray());
+        EasyBeanContext context = new EasyBeanContext(classLoader, list.toArray());
         context.setParent(findEasyContext(springbootStarterName, springContext, applicationName, log));
         context.addIoc(new SpringIocContext(springContext, log)); // 添加Spring容器上下文信息
         context.addBean(new SpringEasyBeanInfo(springContext)); // 将Spring容器上下文信息作为单例存储到容器中
