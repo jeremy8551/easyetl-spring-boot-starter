@@ -1,8 +1,6 @@
 package icu.etl.springboot.starter.listener;
 
-import icu.etl.springboot.starter.EasySpringApplication;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import icu.etl.springboot.starter.configuration.EasySpringArgument;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -16,15 +14,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
  */
 public class EasySpringApplicationRunListener implements SpringApplicationRunListener {
 
-    /** 日志接口 */
-    private final static Logger log = LoggerFactory.getLogger(EasySpringApplicationRunListener.class);
-
-    /** 当前SpringBoot应用 */
-    private SpringApplication application;
-
-    /** SpringBoot应用的启动参数 */
-    private String[] args;
-
     /**
      * 初始化
      *
@@ -32,8 +21,8 @@ public class EasySpringApplicationRunListener implements SpringApplicationRunLis
      * @param args        SpringBoot应用的启动参数
      */
     public EasySpringApplicationRunListener(SpringApplication application, String[] args) {
-        this.application = application;
-        this.args = args;
+        EasySpringArgument.get().setApplication(application);
+        EasySpringArgument.get().setArgs(args);
     }
 
     public void starting() {
@@ -54,11 +43,9 @@ public class EasySpringApplicationRunListener implements SpringApplicationRunLis
      * @param context 容器上下文信息
      */
     public void started(ConfigurableApplicationContext context) {
-        EasySpringApplication.run(context, this.application, this.args, log);
     }
 
     public void finished(ConfigurableApplicationContext context, Throwable exception) {
-        EasySpringApplication.run(context, this.application, this.args, log);
     }
 
 }

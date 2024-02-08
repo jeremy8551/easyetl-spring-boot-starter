@@ -6,7 +6,7 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import icu.etl.concurrent.ExecutorsFactory;
+import icu.etl.concurrent.ExecutorServiceFactory;
 import icu.etl.util.Ensure;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -16,7 +16,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
  * @author jeremy8551@qq.com
  * @createtime 2023/12/6
  */
-public class SpringExecutorsFactory implements ExecutorsFactory {
+public class SpringExecutorFactory implements ExecutorServiceFactory {
 
     /** 线程池 */
     private ExecutorService service;
@@ -26,7 +26,7 @@ public class SpringExecutorsFactory implements ExecutorsFactory {
      *
      * @param service 线程池
      */
-    public SpringExecutorsFactory(ExecutorService service) {
+    public SpringExecutorFactory(ExecutorService service) {
         this.service = Ensure.notNull(service);
     }
 
@@ -35,7 +35,7 @@ public class SpringExecutorsFactory implements ExecutorsFactory {
      *
      * @param service Springboot线程池
      */
-    public SpringExecutorsFactory(ThreadPoolTaskExecutor service) {
+    public SpringExecutorFactory(ThreadPoolTaskExecutor service) {
         this.service = Ensure.notNull(service).getThreadPoolExecutor();
     }
 
