@@ -6,6 +6,7 @@ import java.util.Arrays;
 import icu.etl.concurrent.ThreadSource;
 import icu.etl.ioc.EasyBeanContext;
 import icu.etl.ioc.EasyContext;
+import icu.etl.ioc.EasyContextInstance;
 import icu.etl.ioc.scan.EasyScanPatternList;
 import icu.etl.springboot.starter.ProjectPom;
 import icu.etl.springboot.starter.concurrent.SpringExecutorFactory;
@@ -66,7 +67,7 @@ public class EasyContextFactory {
         context.addIoc(spring); // 添加 Spring 容器
         context.addBean(new EasySpringBeanInfo(springContext)); // 将 Spring 容器上下文信息作为单例注册到容器中
         context.refresh();
-        EasyBeanContext.INSTANCE = context; // 设置单例
+        EasyContextInstance.set(context); // 设置单例
 
         // 打印启动成功标志
         log.info("{} initialization in {} ms ..", starterName, (System.currentTimeMillis() - start));

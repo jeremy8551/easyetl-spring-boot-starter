@@ -26,9 +26,5 @@ public class EasyContextConfiguration {
         return EasyContextFactory.create(springContext);
     }
 
-    public void destroyMethod() {
-        System.out.println("(1)这是一个@Bean destroyMethod销毁方法");
-    }
-
 }
 
